@@ -15,7 +15,7 @@ app.use(session({
   cookie: {
     maxAge: 1200000,
   },
-  resave: false,
+  resave: true,
   saveUninitialized: false
 }));
 
@@ -39,6 +39,13 @@ app.use(express.urlencoded({ extended: false }));
 // Models
 const Perfil = require('./models/perfil');
 const Usuario = require('./models/usuario');
+const Categoria = require('./models/categorias');
+const Marca = require('./models/marca');
+const Entrada = require('./models/entradas');
+const Saidas = require('./models/saidas');
+const Produto = require('./models/produto');
+const entradaItem = require('./models/entradaItem');
+const saidaItem = require('./models/saidaItem');
 
 // Controllers
 

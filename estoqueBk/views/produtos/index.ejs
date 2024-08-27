@@ -1,0 +1,48 @@
+<%- include('../partials/header.ejs') %>
+<%- include('../partials/menu.ejs', {inAdm: inAdm}) %>
+<br>
+<div class="container">
+    <a href="/produtos/novo" class="btn btn-primary">Novo Produto</a>
+    <br>
+    <br>
+    <div class="card">
+        <div class="card-header">
+            Produtos Cadastrados
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thread>
+                    <th class="col-10">Produto</th>
+                    <th class="col-2">Ações</th>
+                </thread>
+                <tbody>
+                    <% produtos.forEach(produto => { %>
+                        <tr>
+                            <%
+                            if(produto.quantidade < produto.minimo)
+                            {
+                            %>
+                            <td><%=produto.descricao %> <span style="color: #FF0000">(<%= produto.quantidade %>)</span></td>
+                            <%
+                            }
+                            else
+                            {
+                            %>
+                            <td><%=produto.descricao %> <span>(<%= produto.quantidade %>)</span></td>
+                            <%
+                            }
+                            %>
+                            <td>
+                                <a href="/produtos/<%= produto.id %>" 
+                                    class="btn btn-primary">Editar</a>
+                                    <a href="/produtos/delete/<%= produto.id %>" 
+                                        class="btn btn-danger">Excluir</a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<%- include('../partials/footer.ejs') %>

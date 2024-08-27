@@ -1,0 +1,1 @@
+exports.JWT_KEY = 'Uma string grande e secreta para gerar o token';

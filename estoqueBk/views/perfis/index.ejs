@@ -1,0 +1,35 @@
+<%- include('../partials/header.ejs') %>
+<%- include('../partials/menu.ejs', {inAdm: inAdm}) %>
+<br>
+<div class="container">
+    <a href="/perfis/novo" class="btn btn-primary">Novo Perfil</a>
+    <br>
+    <br>
+    <div class="card">
+        <div class="card-header">
+            Perfis Cadastrados
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thread>
+                    <th class="col-10">Perfil</th>
+                    <th class="col-2">Ações</th>
+                </thread>
+                <tbody>
+                    <% perfis.forEach(perfil => { %>
+                        <tr>
+                            <td><%=perfil.descricao %></td>
+                            <td>
+                                <a href="/perfis/<%= perfil.id %>" 
+                                    class="btn btn-primary">Editar</a>
+                                    <a href="/perfis/delete/<%= perfil.id %>" 
+                                        class="btn btn-danger">Excluir</a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<%- include('../partials/footer.ejs') %>

@@ -1,0 +1,35 @@
+<%- include('../partials/header.ejs') %>
+<%- include('../partials/menu.ejs', {inAdm: inAdm}) %>
+<br>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            Editar Categoria
+        </div>
+        <div class="card-body">
+            <form method="post" action="/categorias/salvar">
+                <input
+                 type="hidden"
+                 name="id"
+                 id="id"
+                 value="<%= categoria.id %>">
+                <div class="form-floating mb-3">
+                    <input 
+                        type="text" 
+                        class="form-control"
+                        name="descricao"
+                        id="descricao"
+                        placeholder="Descrição"
+                        value="<%= categoria.descricao %>"
+                        required>
+                    <label for="descricao">Descrição</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <button class="btn btn-primary" type="submit">Salvar</button>
+                    <a href="/categorias" class="btn btn-warning">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<%- include('../partials/footer.ejs') %>

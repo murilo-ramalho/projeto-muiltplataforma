@@ -1,0 +1,76 @@
+<%- include('../partials/header.ejs') %>
+<%- include('../partials/menu.ejs', {inAdm: inAdm}) %>
+<br>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            Novo Produto
+        </div>
+        <div class="card-body">
+            <form method="post" action="/produtos">
+                <div class="form-floating mb-3">
+                    <input 
+                        type="text" 
+                        class="form-control"
+                        name="descricao"
+                        id="descricao"
+                        placeholder="Descrição"
+                        required>
+                    <label for="descricao">Descrição</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input 
+                        type="number" 
+                        class="form-control"
+                        name="quantidade"
+                        id="quantidade"
+                        placeholder="Quantidade"
+                        required>
+                    <label for="quantidade">Quantidade</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input 
+                        type="number" 
+                        class="form-control"
+                        name="minimo"
+                        id="minimo"
+                        placeholder="Mínimo"
+                        required>
+                    <label for="minimo">Mínimo</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input 
+                        type="number" 
+                        class="form-control"
+                        name="maximo"
+                        id="maximo"
+                        placeholder="Máximo"
+                        required>
+                    <label for="maximo">Máximo</label>
+                </div>
+                <select class="form-select mb-3" name="marcaId">
+                    <% marcas.forEach(marca => {
+                    %>
+                        <option value="<%= marca.id %>"><%= marca.descricao %></option>
+                    <%
+                    })
+                    %>
+                </select>
+                <select class="form-select mb-3" name="categoriumId">
+                    <% categorias.forEach(categoria => {
+                    %>
+                        <option value="<%= categoria.id %>"><%= categoria.descricao %></option>
+                    <%
+                    })
+                    %>
+                </select>
+                <div class="form-floating mb-3">
+                    <button class="btn btn-primary" type="submit">Salvar</button>
+                    <a href="/produtos" class="btn btn-warning">Cancelar</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<%- include('../partials/footer.ejs') %>

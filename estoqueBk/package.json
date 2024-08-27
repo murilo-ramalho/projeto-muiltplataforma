@@ -1,0 +1,16 @@
+{
+  "name": "estoque",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "debug": "~2.6.9",
+    "express": "^4.19.2",
+    "http-errors": "~1.6.3",
+    "mysql2": "^3.9.7",
+    "sequelize": "^6.37.3"
+  }
+}

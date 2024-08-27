@@ -1,0 +1,65 @@
+<%- include('../partials/header.ejs') %>
+<%- include('../partials/menu.ejs', {inAdm: inAdm}) %>
+<br>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            Editar Usuario
+        </div>
+        <div class="card-body">
+            <form method="post" action="/usuarios/salvar">
+                <input
+                    type="hidden"
+                    name="id"
+                    id="id"
+                    value="<%= usuario.id %>"
+                >
+                <div class="form-floating mb-3">
+                    <input 
+                        type="email" 
+                        class="form-control"
+                        name="email"
+                        id="email"
+                        placeholder="e-mail"
+                        value="<%= usuario.email %>"
+                        required>
+                    <label for="email">e-mail</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input 
+                        type="password" 
+                        class="form-control"
+                        name="senha"
+                        id="senha"
+                        placeholder="Senha"
+                        required>
+                    <label for="senha">Senha</label>
+                </div>
+                
+                  <select class="form-select mb-3" name="perfilId">
+                    <% perfis.forEach(perfil => {
+                        if(perfil.id == usuario.perfilId)
+                        {
+                    %>
+                        <option value="<%= perfil.id %>" selected><%= perfil.descricao %></option>
+                    <%
+                        }
+                        else
+                        {
+                    %>
+                        <option value="<%= perfil.id %>"><%= perfil.descricao %></option>
+                    <%
+                        }
+                    })
+                    %>
+                  </select>
+                <div class="form-floating mb-3">
+                    <button class="btn btn-primary" type="submit">Salvar</button>
+                    <a href="/usuarios" class="btn btn-warning">Cancelar</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<%- include('../partials/footer.ejs') %>

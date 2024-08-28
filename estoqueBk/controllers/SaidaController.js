@@ -7,78 +7,130 @@ exports.getAll = (req, res, next) => {
             ['data', 'ASC']
         ]
     }).then(saidas => {
-        // renderizar tela com todos os dados
+        res.status(200).json({
+            saidas: saidas.map(saida => ({
+                id: saida.id,
+                data: saida.data,
+                nf: saida.nf
+            })),
+            mensagem: 'Saídas encontradas.'
+        });
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            mensagem: 'Erro no servidor!'
+        });
     });
 }
 
-exports.renderNovo = (req, res, next) => {
-    // renderizar formulário para cadastro do novo
-}
-
 exports.create = (req, res, next) => {
-    const data = req.body.data;
-    // teremos que converter de html para banco
-    const nf = req.body.nf;
-
+    let { data, nf } = req.body;
     Saida.findOne({
         where: {
             data: data,
             nf: nf
         }
     }).then(saida => {
-        if(saida == undefined)
-        {
+        if (saida === null) {
             Saida.create({
                 data: data,
                 nf: nf
-            }).then( saidaCriada => {
-                // redirecionar para a tela de cadastro de itens
-                // com o id criado
+            }).then(saidaCriada => {
+                res.status(201).json({
+                    mensagem: 'Saída criada com sucesso!',
+                    saidaId: saidaCriada.id
+                });
+            });
+        } else {
+            res.status(409).json({
+                mensagem: 'Saída já cadastrada.'
             });
         }
-        else
-        {
-            // redirecionar para a tela com todos
-        }
-    });
-}
-
-exports.renderEditar = (req, res, next) => {
-    const id = req.params.id;
-
-    Saida.findByPk(id).then(saida => {
-        // converter data de banco para html
-        // renderizar tela de edição
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            mensagem: 'Erro no servidor!'
+        });
     });
 }
 
 exports.update = (req, res, next) => {
-    const id = req.body.id;
-    const data = req.body.data;
-    const nf = req.body.nf;
+    const { id, data, nf } = req.body;
 
-    // converter data de html para banco
-
-    Saida.update({
-        data: data,
-        nf: nf
-    }, {
-        where: {
-            id: id
-        }
-    }).then(() => {
-        // redirecionar para lista com todos perfis
-    });
+    if (id === undefined || data === undefined || nf === undefined) {
+        res.status(400).json({
+            mensagem: 'Campos obrigatórios ausentes!'
+        });
+    } else {
+        Saida.update({
+            data: data,
+            nf: nf
+        }, {
+            where: { id: id }
+        }).then(() => {
+            res.status(200).json({
+                mensagem: 'Saída atualizada com sucesso!'
+            });
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                mensagem: 'Erro no servidor!'
+            });
+        });
+    }
 }
 
 exports.delete = (req, res, next) => {
     const id = req.params.id;
 
-    Saida.destroy({
-        where: {
-            id: id
-        }
-    }).then(() => {
-        // redirecionar para lista com todos os perfis
-    })
+    if (id === undefined) {
+        res.status(400).json({
+            mensagem: 'ID inválido!'
+        });
+    } else {
+        Saida.destroy({
+            where: { id: id }
+        }).then(() => {
+            res.status(200).json({
+                mensagem: 'Saída excluída com sucesso!'
+            });
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                mensagem: 'Erro no servidor!'
+            });
+        });
+    }
+}
+
+exports.getOne = (req, res, next) => {
+    const id = req.params.id;
+
+    if (id === undefined) {
+        res.status(400).json({
+            mensagem: 'ID inválido!'
+        });
+    } else {
+        Saida.findByPk(id).then(saida => {
+            if (saida) {
+                res.status(200).json({
+                    saida: {
+                        id: saida.id,
+                        data: saida.data,
+                        nf: saida.nf
+                    },
+                    mensagem: 'Saída encontrada!'
+                });
+            } else {
+                res.status(404).json({
+                    mensagem: 'Saída não encontrada!'
+                });
+            }
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                mensagem: 'Erro no servidor!'
+            });
+        });
+    }
 }

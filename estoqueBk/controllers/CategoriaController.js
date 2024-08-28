@@ -1,74 +1,143 @@
-const express = require('express');
-const Categoria = require('../models/categoria');
+const Produto = require('../models/produto');
 
 exports.getAll = (req, res, next) => {
-    Categoria.findAll({
+    Produto.findAll({
         order: [
-            ['descricao', 'ASC']
+            ['nome', 'ASC']
         ]
-    }).then(categorias => {
-        res.render('categorias/index', {inAdm: req.session.login.inAdm, categorias: categorias});
+    }).then(produtos => {
+        res.status(200).json({
+            produtos: produtos.map(prod => ({
+                id: prod.id,
+                nome: prod.nome,
+                preco: prod.preco,
+                descricao: prod.descricao,
+                estoque: prod.estoque
+            })),
+            mensagem: 'Produtos encontrados.'
+        });
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            mensagem: 'Erro no servidor!'
+        });
     });
 }
 
-exports.renderNovo = (req, res, next) => {
-    res.render('categorias/novo', {inAdm: req.session.login.inAdm})
+exports.getOne = (req, res, next) => {
+    const id = req.params.id;
+    
+    if(id === undefined) {
+        res.status(400).json({
+            mensagem: 'Campos inválidos!'
+        });
+    } else {
+        Produto.findByPk(id).then(produto => {
+            if (produto) {
+                res.status(200).json({
+                    produto: {
+                        id: produto.id,
+                        nome: produto.nome,
+                        preco: produto.preco,
+                        descricao: produto.descricao,
+                        estoque: produto.estoque
+                    },
+                    mensagem: 'Produto encontrado!'
+                });
+            } else {
+                res.status(404).json({
+                    mensagem: 'Produto não encontrado!'
+                });
+            }
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                mensagem: 'Erro no servidor!'
+            });
+        });
+    }
 }
 
 exports.create = (req, res, next) => {
-    const descricao = req.body.descricao;
+    const { nome, preco, descricao, estoque } = req.body;
 
-    Categoria.findOne({
-        where: {
-            descricao: descricao
-        }
-    }).then(categoria => {
-        if(categoria == undefined)
-        {
-            Categoria.create({
-                descricao: descricao
-            }).then(() => {
-                res.redirect('/categorias');
+    if(nome === undefined || preco === undefined || estoque === undefined) {
+        res.status(400).json({
+            mensagem: 'Campos inválidos!'
+        });
+    } else {
+        Produto.create({
+            nome: nome,
+            preco: preco,
+            descricao: descricao,
+            estoque: estoque
+        }).then(produtoCriado => {
+            res.status(201).json({
+                mensagem: 'Produto criado com sucesso!',
+                produto: {
+                    id: produtoCriado.id,
+                    nome: produtoCriado.nome,
+                    preco: produtoCriado.preco,
+                    descricao: produtoCriado.descricao,
+                    estoque: produtoCriado.estoque
+                }
             });
-        }
-        else
-        {
-            res.redirect('/categorias');
-        }
-    });
-}
-
-exports.renderEditar = (req, res, next) => {
-    const id = req.params.id;
-
-    Categoria.findByPk(id).then(categoria => {
-        res.render('categorias/editar', { inAdm: req.session.login.inAdm, categoria: categoria});
-    });
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                mensagem: 'Erro no servidor!'
+            });
+        });
+    }
 }
 
 exports.update = (req, res, next) => {
-    const id = req.body.id;
-    const descricao = req.body.descricao;
+    const { id, nome, preco, descricao, estoque } = req.body;
 
-    Categoria.update({
-        descricao: descricao
-    }, {
-        where: {
-            id: id
-        }
-    }).then(() => {
-        res.redirect('/categorias');
-    });
+    if(id === undefined || nome === undefined || preco === undefined || estoque === undefined) {
+        res.status(400).json({
+            mensagem: 'Campos inválidos!'
+        });
+    } else {
+        Produto.update({
+            nome: nome,
+            preco: preco,
+            descricao: descricao,
+            estoque: estoque
+        }, {
+            where: { id: id }
+        }).then(() => {
+            res.status(200).json({
+                mensagem: 'Produto atualizado com sucesso!'
+            });
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                mensagem: 'Erro no servidor!'
+            });
+        });
+    }
 }
 
 exports.delete = (req, res, next) => {
     const id = req.params.id;
 
-    Categoria.destroy({
-        where: {
-            id: id
-        }
-    }).then(() => {
-        res.redirect('/categorias');
-    })
+    if(id === undefined) {
+        res.status(400).json({
+            mensagem: 'Campos inválidos!'
+        });
+    } else {
+        Produto.destroy({
+            where: { id: id }
+        }).then(() => {
+            res.status(200).json({
+                mensagem: 'Produto excluído com sucesso!'
+            });
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                mensagem: 'Erro no servidor!'
+            });
+        });
+    }
 }

@@ -1,2 +1,4 @@
-# projeto-muiltplataforma
-evolução do projeto da matéria de programação multiplataforma
+# trabalho final
+
+- Murilo Ramalho da Mata
+- Camila Gome da Silva Casa

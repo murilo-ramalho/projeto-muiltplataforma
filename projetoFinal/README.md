@@ -1,4 +1,7 @@
-# loja
+# lanchonete
+
+- Murilo Ramalho da Mata
+- Camila Gomes da Silva Casa
 
 A new Flutter project.
 
